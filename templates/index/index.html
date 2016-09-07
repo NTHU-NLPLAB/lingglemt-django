@@ -1,0 +1,104 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <!-- coding : utf-8 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <!-- cache : off -->
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
+
+    <!-- Lastest IE version -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- RWD -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title -->
+    <title>Linggle 10^12- Language Reference Search Engines - NLPLab</title>
+
+    <meta name=“description” content="Linggle 10^12 is a language reference search engine developed by NTHU NLPLab. The system takes advantage of all public Web pages to provide frequency information on word combinations. With frequency information, you can exam if the phrase is composed in a common way. And with the powerful query syntax, you can find out a proper phrase to describe a subject, a concept or the usage of certain verb, adjective, adverb">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.css" />
+    <link rel="shortcut icon" href="static/img/favicon.png" />
+
+    <!-- js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script src="static/js/index/main.js"></script>
+    <script src="static/js/common.js"></script>
+
+</head>
+
+<body>
+    {% csrf_token %}
+    <div class="ui text container">
+
+        <div class="ui horizontal divider"></div>
+
+        <div class="ui sizer vertical">
+            <div class="ui huge header centered">
+                <div class="content">
+                    Linggle Translate
+                    <div class="sub header center aligned">Welcome to the all new century of machine translation!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui horizontal divider"></div>
+
+        <div id="search_bar" class="ui right action left icon fluid large input">
+            <i class="search icon"></i>
+            <input id="search_input" type="text" placeholder="Type something here...">
+            <!--<div class="ui basic floating dropdown button">
+                <div class="text">Translate</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item">Translate</div>
+                    <div class="item">BLinggle</div>
+                    <div class="item">GLinggle</div>
+                </div>
+            </div>-->
+            <select class="ui compact selection dropdown">
+                <option selected="" value="all">Translate</option>
+                <option value="blinggle">BLinggle</option>
+                <option value="glinggle">GLinggle</option>
+            </select>
+        </div>
+
+        <div class="ui horizontal divider"></div>
+
+        <table class="ui very compact large red selectable unstackable table">
+            <thead>
+                <tr>
+                    <th>Result</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody id="search-result">
+                <tr>
+                    <td colspan="2" class="center aligned">
+                        <p>Now type something English</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+                <!--<div class="ui segment">
+                    <div class="ui active dimmer">
+                        <div class="ui text indeterminate loader">Processing</div>
+                    </div>
+                </div> -->
+    </div>
+
+
+    <!--<div class="ui container">
+       
+    </div>-->
+
+</body>
+
+</html>
