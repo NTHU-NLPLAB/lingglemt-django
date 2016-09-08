@@ -13,7 +13,7 @@ s_parser = StanfordParser(STANFORD_PARSER_PATH, STANFORD_PARSER_MODEL_PATH)
 
 def pattern(node, isLEAF, isTREE):
     if not isTREE(node):
-        return ('', [], )
+        return '', []
     res = ''
     try:
         LHS = node.label()
@@ -143,7 +143,7 @@ def pattern(node, isLEAF, isTREE):
     except:
         pass
 
-    return (res, RHS,)
+    return res, RHS
 
 
 def lexicalizeTree(node, isLEAF, isTREE):
@@ -165,14 +165,11 @@ def lexicalizeTree(node, isLEAF, isTREE):
 def lexSynTree(node, parent, isLEAF, isTREE):
     if isLEAF(node):
         return
-    tags = ['NP', 'PP', 'ADJP', 'VP', 'PRT', 'RB', 'JJ', 'S', 'SBAR']
+    tags = {'NP', 'PP', 'ADJP', 'VP', 'PRT', 'RB', 'JJ', 'S', 'SBAR'}
     # reorder subtree
     pat, RHS = pattern(node, isLEAF, isTREE)
     if pat != '' and pat in SpgTable:
         print('-- %s %s' % (pat, SpgTable[pat]))
-        global FIND_SPG
-        FIND_SPG = True
-        # print FIND_SPG
         # 'harmful to NP':[u'對 NP 有害', {0:0, 1:2, 2:2} ],
         RHSlabel, ALIGN = SpgTable[pat]
         RHSlabel = RHSlabel.split()
