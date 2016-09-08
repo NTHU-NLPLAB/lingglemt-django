@@ -169,7 +169,7 @@ def lexSynTree(node, parent, isLEAF, isTREE):
     # reorder subtree
     pat, RHS = pattern(node, isLEAF, isTREE)
     if pat != '' and pat in SpgTable:
-        print('-- %s %s' % (pat, str(SpgTable[pat])))
+        print('-- %s %s' % (pat, SpgTable[pat]))
         global FIND_SPG
         FIND_SPG = True
         # print FIND_SPG
