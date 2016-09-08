@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import requests
-import urlparse
+from urllib.parse import urljoin
 import json
 
 BING_TRANS_URL = 'http://www.bing.com/translator/'
@@ -24,7 +24,7 @@ class BingTranslator:
         self.__init__()
 
     def __translate__(self, data, fromlang='en', tolang='zh-CHT'):
-        url = urlparse.urljoin(BING_TRANS_URL, API_URL % (fromlang, tolang))
+        url = urljoin(BING_TRANS_URL, API_URL % (fromlang, tolang))
         data = json.dumps(data)
         response = requests.post(url, headers=self.__header, data=data)
         # response = self.__session.post(url, cookies=self.__session.cookies, data=data)
@@ -51,7 +51,7 @@ class BingTranslator:
 
 if __name__ == '__main__':
     translator = BingTranslator()
-    sents = ['harmful to environment', 'harmful to brain', 'leave from Seatle']
+    sents = ['harmful to environment', 'harmful to brain', 'leave from Seattle']
 
     # example of translating one sentence at a time
     # for sent in sents:
@@ -60,4 +60,4 @@ if __name__ == '__main__':
     # example of translating many sentences at the same time
     res = translator.translate_many(sents)
     for en, zh in zip(sents, res):
-        print '%s ==> %s' % (en, zh)
+        print(en, '==>', zh)
