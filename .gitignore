@@ -90,3 +90,6 @@ ENV/
 
 # MAC OS
 .DS_Store
+
+# django db
+db.sqlite3
