@@ -26,10 +26,12 @@ class BingTranslator:
     def __translate__(self, data, fromlang='en', tolang='zh-CHT'):
         url = urljoin(BING_TRANS_URL, API_URL % (fromlang, tolang))
         data = json.dumps(data)
-        response = requests.post(url, headers=self.__header, data=data)
-        # response = self.__session.post(url, cookies=self.__session.cookies, data=data)
-        result = response.json()
-        for i in range(3):
+
+        result = None
+        while not result:
+            response = requests.post(url, headers=self.__header, data=data)
+            # response = self.__session.post(url, cookies=self.__session.cookies, data=data)
+            result = response.json()
             if response.status_code == 200 and 'items' in result:
                 for item in result['items']:
                     yield item['text']
@@ -45,7 +47,7 @@ class BingTranslator:
         res = []
         data = [{'text': sent} for sent in sents]
         for i in range(0, len(data), BATCH_SIZE):
-            res += list(self.__translate__(data[i:i+BATCH_SIZE]))
+            res += list(self.__translate__(data[i:i + BATCH_SIZE]))
         return res
 
 
@@ -59,5 +61,6 @@ if __name__ == '__main__':
 
     # example of translating many sentences at the same time
     res = translator.translate_many(sents)
+    print(res)
     for en, zh in zip(sents, res):
         print(en, '==>', zh)
