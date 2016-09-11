@@ -23,6 +23,7 @@
     <meta name=“description” content="Linggle Translate is a MT system developed by NTHU NLPLab.">
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.css" />
+    <link rel="stylesheet" href="static/css/index/main.css" />
     <link rel="shortcut icon" href="static/img/favicon.png" />
 
     <!-- js -->
@@ -53,15 +54,6 @@
         <div id="search_bar" class="ui right action left icon fluid large input">
             <i class="search icon"></i>
             <input id="search_input" type="text" placeholder="Type something here...">
-            <!--<div class="ui basic floating dropdown button">
-                <div class="text">Translate</div>
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <div class="item">Translate</div>
-                    <div class="item">BLinggle</div>
-                    <div class="item">GLinggle</div>
-                </div>
-            </div>-->
             <select class="ui compact selection dropdown">
                 <option selected="" value="all">Translate</option>
                 <option value="blinggle">BLinggle</option>
@@ -71,7 +63,48 @@
 
         <div class="ui horizontal divider"></div>
 
-        <table class="ui very compact large red selectable unstackable table">
+        <div class="ui grid">
+            <div class="four wide column">
+                <div id="trans_menu" class="ui vertical fluid tabular menu">
+                    <a class="item active">BLinggle</a>
+                    <a class="item">GLinggle</a>
+                    <a class="item">Bing</a>
+                    <a class="item">Google</a>
+                </div>
+            </div>
+            <div class="twelve wide stretched column">
+              <div id="result_area" class="ui segment">
+                  <div class="ui dimmer">
+                      <div class="ui text loader">Loading</div>
+                  </div>
+                  <p class="ui top attached segment result" alt='blinggle'>&nbsp;</p>
+                  <p class="ui attached segment result" alt='glinggle'>&nbsp;</p>
+                  <p class="ui attached segment result" alt='bing'>&nbsp;</p>
+                  <p class="ui bottom attached segment result" alt='google'>&nbsp;</p>
+              </div>
+            </div>
+        </div>
+
+        <!-- <div id="result_area" class="ui segments">
+            <div class="ui segment">
+                <a class="ui yellow top right attached label">Bing</a>
+                <p class="result" alt="bing"></p>
+            </div>
+            <div class="ui segment">
+                <a class="ui green top right attached label">BLinggle</a>
+                <p class="result" alt="blinggle"></p>
+            </div>
+            <div class="ui segment">
+                <a class="ui blue top right attached label">Google</a>
+                <p class="result" alt="google"></p>
+            </div>
+            <div class="ui segment">
+                <a class="ui red top right attached label">GLinggle</a>
+                <p class="result" alt="glinggle"></p>
+            </div>
+        </div> -->
+
+        <!-- <table class="ui very compact large red selectable unstackable table">
             <thead>
                 <tr>
                     <th>Result</th>
@@ -80,12 +113,12 @@
             </thead>
             <tbody id="search-result">
                 <tr>
-                    <td colspan="2" class="center aligned">
+                    <td colspan="2">
                         <p>Now type something English</p>
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </table> -->
 
                 <!--<div class="ui segment">
                     <div class="ui active dimmer">

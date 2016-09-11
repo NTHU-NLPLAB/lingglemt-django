@@ -1,4 +1,6 @@
 var timeoutId = '';
+var trans_socket;
+var default_sent = 'Some packed food we considered safe may contain ingredients harmful to humans.'
 
 function getCookie(name) {
     var cookieValue = null;
@@ -23,35 +25,77 @@ $(document).ready(function() {
         headers: { "X-CSRFToken": csrftoken }
     });
 
-    $('#search_input').on('input', function() {
-        var query = this.value.trim();
-        if (query !== '') {
-            resetAutoSearchTimer(1000, query);
-        }
-    });
     $('.ui.dropdown').dropdown();
+
+    $('#trans_menu > a.item').on('click', function() {
+        $(this).addClass('active').siblings().removeClass('active');
+        var option = $(this).text().toLowerCase();
+        $('#result_area p.result[alt="' + option + '"]').addClass('active').siblings('p.result').removeClass('active');
+    });
+
+    init_trans_socket();
+
+    timeoutId = setTimeout(function() {
+        $('#search_input').val(default_sent).select();
+    }, 1000);
+
 });
 
-function resetAutoSearchTimer(ms, query) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(function() {
+function init_trans_socket() {
+      // init translation socket
+      trans_socket = new WebSocket("ws://" + window.location.host + "/translate/");
+      trans_socket.onmessage = function(message) {
+          data = JSON.parse(message.data);
+          if(data.type == 'status') {
+              console.log('status: '+data.content);
+              $('#result_area div.ui.text.loader').text(data.content);
+          } else if(data.type == 'result') {
+              renderTranslationResult(data.content);
+              var option = $('#trans_menu .item.active').text().toLowerCase();
+              $('#result_area p.result[alt="' + option + '"]').addClass('active').siblings('p.result').removeClass('active');
+          }
+      }
+      trans_socket.onopen = function(message) {
+          search();
+          $('#search_input').on('input', function() {
+              clearTimeout(timeoutId);
+              timeoutId = setTimeout(search, 1000);
+          });
+      }
+      trans_socket.onclose = function(message) {
+          setTimeout(function(){init_trans_socket();}, 5000);
+      }
+}
+
+function search() {
+    var query = $('#search_input').val().trim();
+    if (query !== '') {
         $('#search_bar').addClass("loading");
-        $.ajax({
-            url: '/translate',
-            type: 'POST',
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({'text': query}),
-            dataType: 'json',
-        }).done(renderTranslationResult);
-    }, ms);
-};
+        $('#result_area > div.ui.dimmer').addClass("active");
+        // $('#result_area').addClass("loading");
+        trans_socket.send(JSON.stringify({'text': query}));
+    }
+    // $.ajax({
+    //     url: '/translate',
+    //     type: 'POST',
+    //     contentType: "application/json; charset=utf-8",
+    //     data: JSON.stringify({'text': query}),
+    //     dataType: 'json',
+    // }).done(renderTranslationResult);
+}
 
 function renderTranslationResult(data) {
     console.log(data);
-    htmlFrag = '';
-    for(type in data) {
-        htmlFrag += '<tr><td>' + escapeHtml(data[type]) + '</td><td>' + escapeHtml(type) + '</td></tr>';
-    }
-    $('tbody#search-result').html(htmlFrag);
+    $('#result_area p.result').each(function() {
+        type = $(this).attr('alt');
+        $(this).text(data[type]);
+    });
+    // htmlFrag = '';
+    // for(type in data) {
+    //     htmlFrag += '<tr><td>' + escapeHtml(data[type]) + '</td><td>' + escapeHtml(type) + '</td></tr>';
+    // }
+    // $('tbody#search-result').html(htmlFrag);
     $('#search_bar').removeClass("loading");
+    $('#result_area > div.ui.dimmer').removeClass("active");
+    // $('#result_area').removeClass("loading");
 };
