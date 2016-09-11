@@ -30,7 +30,7 @@ $(document).ready(function() {
     $('#trans_menu > a.item').on('click', function() {
         $(this).addClass('active').siblings().removeClass('active');
         var option = $(this).text().toLowerCase();
-        $('#result_area p.result[alt="' + option + '"]').addClass('active').siblings('p.result').removeClass('active');
+        $('#result_area .result[alt="' + option + '"]').addClass('active').siblings('.result').removeClass('active');
     });
 
     init_trans_socket();
@@ -52,12 +52,15 @@ function init_trans_socket() {
           } else if(data.type == 'result') {
               renderTranslationResult(data.content);
               var option = $('#trans_menu .item.active').text().toLowerCase();
-              $('#result_area p.result[alt="' + option + '"]').addClass('active').siblings('p.result').removeClass('active');
+              $('#result_area .result[alt="' + option + '"]').addClass('active').siblings('.result').removeClass('active');
           }
       }
       trans_socket.onopen = function(message) {
           search();
           $('#search_input').on('input', function() {
+              $('#search_bar').addClass('loading');
+              $('#result_area > div.ui.dimmer').addClass('active')
+                .children('.loader').addClass('indeterminate').text('Waiting user input...');
               clearTimeout(timeoutId);
               timeoutId = setTimeout(search, 1000);
           });
@@ -70,8 +73,8 @@ function init_trans_socket() {
 function search() {
     var query = $('#search_input').val().trim();
     if (query !== '') {
-        $('#search_bar').addClass("loading");
-        $('#result_area > div.ui.dimmer').addClass("active");
+        $('#result_area > div.ui.dimmer').addClass('active')
+          .children('.loader').removeClass('indeterminate').text('Sending translation request...');
         // $('#result_area').addClass("loading");
         trans_socket.send(JSON.stringify({'text': query}));
     }
@@ -86,7 +89,7 @@ function search() {
 
 function renderTranslationResult(data) {
     console.log(data);
-    $('#result_area p.result').each(function() {
+    $('#result_area .result').each(function() {
         type = $(this).attr('alt');
         $(this).text(data[type]);
     });

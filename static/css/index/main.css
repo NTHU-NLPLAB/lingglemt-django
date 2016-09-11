@@ -1,7 +1,7 @@
-p.result.active {
+.result.active {
   color: rgba(0,0,0,.95);
 }
 
-p.result {
+.result {
   color: rgba(0,0,0,.2);
 }
