@@ -222,6 +222,36 @@ def spg_translate(sent):
     return res
 
 
+def spg_translate_with_progress(sent):
+    yield 'status', 'Parsing the sentence... (1/5)'
+    parseTree = [tree for tree in s_parser.raw_parse(sent)]
+    # lexTree.draw()
+
+    yield 'status', 'Lexicalizing the sentence tree... (2/5)'
+    lexTree = copy.deepcopy(parseTree[0])
+    lexicalizeTree(lexTree, lambda x: type(x) != type(lexTree), lambda x: type(x) == type(lexTree))
+    # lexTree.draw()
+
+    yield 'status', 'Finding synchrounous grammar patterns... (3/5)'
+    synTree = copy.deepcopy(parseTree[0])
+    lexSynTree(synTree, None, lambda x: type(x) != type(synTree), lambda x: type(x) == type(synTree))
+    # synTree.draw()
+
+    yield 'status', 'Linearizing the spg tree... (4/5)'
+    string = LinearizeTree(synTree, lambda x: type(x) != type(synTree), lambda x: type(x) == type(synTree))
+
+    spg_sent = ' '.join(string)
+
+    yield 'status', 'Performing statistical machine translation... (5/5)'
+    res = {
+        'spg': spg_sent,
+        'google': gtrans(sent, 'zh-TW'),
+        'bing': bingmt.translate_one(sent),
+        'glinggle': gtrans(spg_sent, 'zh-TW'),
+        'blinggle': bingmt.translate_one(spg_sent),
+    }
+    yield 'result', res
+
 bingmt = BingTranslator()
 
 if __name__ == '__main__':
