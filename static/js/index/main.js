@@ -20,6 +20,7 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 $(document).ready(function() {
+    $('#search_input').select();
     // set up ajax csrf-token
     $.ajaxSetup({
         headers: { "X-CSRFToken": csrftoken }
@@ -77,6 +78,8 @@ function search() {
           .children('.loader').removeClass('indeterminate').text('Sending translation request...');
         // $('#result_area').addClass("loading");
         trans_socket.send(JSON.stringify({'text': query}));
+    } else {
+        removeLoading();
     }
     // $.ajax({
     //     url: '/translate',
@@ -98,7 +101,11 @@ function renderTranslationResult(data) {
     //     htmlFrag += '<tr><td>' + escapeHtml(data[type]) + '</td><td>' + escapeHtml(type) + '</td></tr>';
     // }
     // $('tbody#search-result').html(htmlFrag);
+    removeLoading();
+};
+
+function removeLoading() {
     $('#search_bar').removeClass("loading");
     $('#result_area > div.ui.dimmer').removeClass("active");
     // $('#result_area').removeClass("loading");
-};
+}
