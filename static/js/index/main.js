@@ -67,7 +67,7 @@ function init_trans_socket() {
               $('#result_area > div.ui.dimmer').addClass('active')
                 .children('.loader').addClass('indeterminate').text('Waiting user input...');
               clearTimeout(timeoutId);
-              timeoutId = setTimeout(search, 1000);
+              timeoutId = setTimeout(search, 2000);
           });
       }
       trans_socket.onclose = function(message) {
