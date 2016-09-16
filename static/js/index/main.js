@@ -36,8 +36,12 @@ $(document).ready(function() {
 
     init_trans_socket();
 
+    // init input value if the user enters nothing after 1 sec
     timeoutId = setTimeout(function() {
         $('#search_input').val(default_sent).select();
+        if(trans_socket.readyState == WebSocket.OPEN) {
+            search();
+        }
     }, 1000);
 
 });
