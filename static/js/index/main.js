@@ -92,6 +92,7 @@ function search() {
     //     data: JSON.stringify({'text': query}),
     //     dataType: 'json',
     // }).done(renderTranslationResult);
+    return false;
 }
 
 function renderTranslationResult(data) {

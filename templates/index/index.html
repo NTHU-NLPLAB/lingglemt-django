@@ -51,15 +51,17 @@
 
         <div class="ui horizontal divider"></div>
 
-        <div id="search_bar" class="ui right action left icon fluid large input">
-            <i class="search icon"></i>
-            <input id="search_input" type="text" placeholder="Type something here...">
-            <select class="ui compact selection dropdown">
-                <option selected="" value="all">Translate</option>
-                <option value="blinggle">BLinggle</option>
-                <option value="glinggle">GLinggle</option>
-            </select>
-        </div>
+        <form class="ui form" onsubmit="return search();">
+            <div id="search_bar" class="ui right action left icon fluid large input">
+                <i class="search icon"></i>
+                <input id="search_input" type="text" placeholder="Type something here...">
+                <select class="ui compact selection dropdown">
+                    <option selected="" value="all">Translate</option>
+                    <option value="blinggle">BLinggle</option>
+                    <option value="glinggle">GLinggle</option>
+                </select>
+              </div>
+          </form>
 
         <div class="ui horizontal divider"></div>
 
