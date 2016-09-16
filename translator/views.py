@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 import json
 
-from translator.linggletranslate import spg_translate
+from lingglemt.linggletranslate import spg_translate
 # Create your views here.
 
 

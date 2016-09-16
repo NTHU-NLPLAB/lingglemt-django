@@ -1,8 +1,8 @@
 import logging
 import json
 from channels.sessions import channel_session
-from translator.models import TranslateRequest
-from translator.linggletranslate import spg_translate_with_progress
+# from translator.models import TranslateRequest
+from lingglemt.linggletranslate import spg_translate_with_progress
 
 log = logging.getLogger(__name__)
 
@@ -24,8 +24,8 @@ def ws_connect(message):
         log.debug('invalid ws path=%s', message['path'])
         return
 
-    new_request = TranslateRequest.objects.create()
-    message.channel_session['rid'] = new_request.id
+    # new_request = TranslateRequest.objects.create()
+    # message.channel_session['rid'] = new_request.id
 
 
 @channel_session
@@ -34,22 +34,25 @@ def ws_receive(message):
         msg = {'type': status, 'content': content}
         message.reply_channel.send({'text': json.dumps(msg)})
     # Look up the room from the channel session, bailing if it doesn't exist
-    try:
-        rid = message.channel_session['rid']
-        request = TranslateRequest.objects.get(id=rid)
-    except KeyError:
-        log.debug('no rid in channel_session')
-        return
-    except TranslateRequest.DoesNotExist:
-        log.debug('recieved message, but request does not exist rid=%s', rid)
-        return
+    # try:
+    #     rid = message.channel_session['rid']
+    #     request = TranslateRequest.objects.get(id=rid)
+    # except KeyError:
+    #     log.debug('no rid in channel_session')
+    #     return
+    # except TranslateRequest.DoesNotExist:
+    #     log.debug('recieved message, but request does not exist rid=%s', rid)
+    #     return
 
     data = json.loads(message['text'])
-    request.source = data['text']
+    # request.source = data['text']
 
-    for status, content in spg_translate_with_progress(request.source):
+    for status, content in spg_translate_with_progress(data['text']):
+        # TODO: if new request comes, it should be interrupted.
+        # if request.source is not data['text']:
+        #     return
         reply_json(status, content)
-    request.result = content
+    # request.result = content
     # try:
     #     for status, content in spg_translate(request.source):
     #         reply_json(status, content)
@@ -60,9 +63,10 @@ def ws_receive(message):
 
 @channel_session
 def ws_disconnect(message):
-    try:
-        rid = message.channel_session['rid']
-        request = TranslateRequest.objects.get(id=rid)
-        # request.delete()
-    except (KeyError, TranslateRequest.DoesNotExist):
-        pass
+    pass
+    # try:
+    #     rid = message.channel_session['rid']
+    #     request = TranslateRequest.objects.get(id=rid)
+    #     # request.delete()
+    # except (KeyError, TranslateRequest.DoesNotExist):
+    #     pass
