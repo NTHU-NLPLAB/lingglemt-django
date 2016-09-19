@@ -34,6 +34,7 @@ $(document).ready(function() {
         $('#result_area .result[alt="' + option + '"]').addClass('active').siblings('.result').removeClass('active');
     });
 
+    // initialize WebSocket
     init_trans_socket();
 
     // init input value if the user enters nothing after 1 sec
@@ -56,12 +57,11 @@ function init_trans_socket() {
               $('#result_area div.ui.text.loader').text(data.content);
           } else if(data.type == 'result') {
               renderTranslationResult(data.content);
-              var option = $('#trans_menu .item.active').text().toLowerCase();
-              $('#result_area .result[alt="' + option + '"]').addClass('active').siblings('.result').removeClass('active');
           }
       }
       trans_socket.onopen = function(message) {
           search();
+          // initialize search event listener
           $('#search_input').on('input', function() {
               $('#search_bar').addClass('loading');
               $('#result_area > div.ui.dimmer').addClass('active')
@@ -70,28 +70,35 @@ function init_trans_socket() {
               timeoutId = setTimeout(search, 2000);
           });
       }
+      // auto reconnects after connection closes
       trans_socket.onclose = function(message) {
           setTimeout(function(){init_trans_socket();}, 5000);
       }
 }
 
 function search() {
+    // add loading to search bar
+    $('#search_bar').addClass('loading');
     var query = $('#search_input').val().trim();
     if (query !== '') {
         $('#result_area > div.ui.dimmer').addClass('active')
           .children('.loader').removeClass('indeterminate').text('Sending translation request...');
         // $('#result_area').addClass("loading");
+
+        // use WebSocket to communicate
         trans_socket.send(JSON.stringify({'text': query}));
+
+        // use AJAX to communicate
+        // $.ajax({
+        //     url: '/translate',
+        //     type: 'POST',
+        //     contentType: "application/json; charset=utf-8",
+        //     data: JSON.stringify({'text': query}),
+        //     dataType: 'json',
+        // }).done(renderTranslationResult);
     } else {
         removeLoading();
     }
-    // $.ajax({
-    //     url: '/translate',
-    //     type: 'POST',
-    //     contentType: "application/json; charset=utf-8",
-    //     data: JSON.stringify({'text': query}),
-    //     dataType: 'json',
-    // }).done(renderTranslationResult);
     return false;
 }
 
@@ -101,16 +108,12 @@ function renderTranslationResult(data) {
         type = $(this).attr('alt');
         $(this).text(data[type]);
     });
-    // htmlFrag = '';
-    // for(type in data) {
-    //     htmlFrag += '<tr><td>' + escapeHtml(data[type]) + '</td><td>' + escapeHtml(type) + '</td></tr>';
-    // }
-    // $('tbody#search-result').html(htmlFrag);
+    var option = $('#trans_menu .item.active').text().toLowerCase();
+    $('#result_area .result[alt="' + option + '"]').addClass('active').siblings('.result').removeClass('active');
     removeLoading();
 };
 
 function removeLoading() {
     $('#search_bar').removeClass("loading");
     $('#result_area > div.ui.dimmer').removeClass("active");
-    // $('#result_area').removeClass("loading");
 }
