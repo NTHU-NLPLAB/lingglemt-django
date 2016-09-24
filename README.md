@@ -74,7 +74,7 @@ or, use `redis-server`
 ```py
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgiref.inmemory.ChannelLayer",
+        "BACKEND": "asgi_redis.RedisChannelLayer",
         "ROUTING": "linggletranslate.routing.channel_routing",
         "CONFIG": {
             # your own redis-server settings here
