@@ -1,5 +1,7 @@
-# lingglemt-django
-Linggle Machine Translation Web System
+# lingglemt-django (standalone)
+Linggle Machine Translation Web System (standalone distribution)
+
+Note: This is standalone version which does not require **lingglemt-core** and **redis**. It should be easier to build.
 
 ## Prerequisite
 - Essential
