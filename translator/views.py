@@ -1,8 +1,11 @@
 from django.http import HttpResponse, JsonResponse
 import json
 
-from lingglemt.linggletranslate import spg_translate
+from .bingslate import BingTranslator
+from .goslate import gtrans
 # Create your views here.
+
+bingmt = BingTranslator()
 
 
 def translate_json_view(request):
@@ -11,4 +14,11 @@ def translate_json_view(request):
     elif request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         request_body = json.loads(body_unicode)
-        return JsonResponse(spg_translate(request_body['text']))
+        return JsonResponse(tranlate(request_body['text']))
+
+
+def tranlate(sent):
+    return {
+        'google': gtrans(sent, 'zh-TW'),
+        'bing': bingmt.translate_one(sent),
+    }

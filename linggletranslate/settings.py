@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
     'translator',
 ]
 
@@ -122,16 +121,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, './static'),
 )
-
-# Channel settings
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        # "BACKEND": "asgiref.inmemory.ChannelLayer",
-        "ROUTING": "linggletranslate.routing.channel_routing",
-        # "CONFIG": {
-        #     # "hosts": [("redis-server-name", 6379)],
-        #     "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-        # },
-    },
-}
